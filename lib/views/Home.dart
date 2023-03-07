@@ -4,6 +4,7 @@ import 'package:onlynewsapp/helper/data.dart';
 import 'package:onlynewsapp/models/article_model.dart';
 import 'package:onlynewsapp/models/category_model.dart';
 import 'package:onlynewsapp/views/articles.dart';
+import 'package:onlynewsapp/views/news_category.dart';
 
 import '../helper/news.dart';
 
@@ -70,8 +71,8 @@ class _HomeState extends State<Home> {
 
             )
           : Column(
-              children: <Widget>[
 
+              children: <Widget>[
 
                 //Categories.
                 Container(
@@ -121,14 +122,21 @@ class _HomeState extends State<Home> {
 
 class CategoryTile extends StatelessWidget {
   // const CategoryTile({Key? key}) : super(key: key);
-  final imageUrl, categoryName;
+  final  imageUrl;
+  final String categoryName;
 
-  CategoryTile({this.imageUrl, this.categoryName});
+  CategoryTile({ this.imageUrl, required this.categoryName});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context)=>CategoryNews(
+                category: categoryName.toLowerCase()
+            )
+        ));
+      },
       child: Container(
         margin: EdgeInsets.only(right: 16),
         child: Stack(
@@ -183,13 +191,13 @@ class BlogTile extends StatelessWidget {
     debugPrint("desc: $description");
     debugPrint("title: $title");
     return GestureDetector(
-      // onTap: (){
-      //   Navigator.push(context, MaterialPageRoute(
-      //       builder: (context)=>ArticleView(
-      //
-      //   )
-      //   ));
-      // },
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context)=>ArticleView(
+              blogUrl: url,
+        )
+        ));
+      },
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
         child: Column(
