@@ -8,7 +8,7 @@ class News {
 
   Future<void> getNews() async {
     // String url = "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=ce79fe9eb7c74651826b482f58d8b5da";
-    var url = Uri.parse("https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=ce79fe9eb7c74651826b482f58d8b5da");
+    var url = Uri.parse("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=ce79fe9eb7c74651826b482f58d8b5da");
 
     var response = await http.get(url);
     print("res status:  ${response.statusCode}");
@@ -18,6 +18,7 @@ class News {
 
     if (jsonData['status'] == "ok") {
       jsonData["articles"].forEach((element) {
+        print(element);
         // if (element["urlToImage"] != null && element["description"] != null) {
           ArticleModel articleModel = ArticleModel(
             id:element["id"],

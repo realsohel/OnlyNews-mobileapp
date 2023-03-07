@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:onlynewsapp/helper/data.dart';
 import 'package:onlynewsapp/models/article_model.dart';
 import 'package:onlynewsapp/models/category_model.dart';
+import 'package:onlynewsapp/views/articles.dart';
 
 import '../helper/news.dart';
 
@@ -31,6 +33,8 @@ class _HomeState extends State<Home> {
     await newsClass.getNews();
     articles = newsClass.news;
     debugPrint("articles length ${articles.length}");
+
+
     // {print(articles[0].title) ;}
     // {print}
 
@@ -63,13 +67,16 @@ class _HomeState extends State<Home> {
       body: _loading
           ? const Center(
               child: CircularProgressIndicator(),
+
             )
           : Column(
               children: <Widget>[
+
+
                 //Categories.
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
                   height: 70,
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   child: ListView.builder(
                       itemCount: categories.length,
                       shrinkWrap: true,
@@ -81,17 +88,27 @@ class _HomeState extends State<Home> {
                         );
                       }),
                 ),
+
+
                 //NEWS
                 Expanded(
+
+
                   child: ListView.builder(
+
+                      padding: EdgeInsets.symmetric(horizontal: 16 ),
                       shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
                       itemCount: articles.length,
                       itemBuilder: (context, index) {
+
                         return BlogTile(
                           id: articles[index].id ?? "0",
                           imageUrl: articles[index].urlToImage ?? "",
                           title: articles[index].title ?? "",
-                          desc: articles[index].description ?? "",
+                          description: articles[index].description ?? "The description of this article is not given.",
+                          url: articles[index].url ?? "",
+
                           // url: articles[index].url ,
                         );
                       }),
@@ -118,8 +135,8 @@ class CategoryTile extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl:imageUrl,
                   width: 120,
                   height: 60,
                   fit: BoxFit.cover,
@@ -150,24 +167,53 @@ class CategoryTile extends StatelessWidget {
 class BlogTile extends StatelessWidget {
   // const BlogTile({Key? key}) : super(key: key);
 
-  String id, imageUrl, title, desc; //url ;
+  String id, imageUrl, title, description, url ;
   BlogTile({
     required this.id,
     required this.imageUrl,
     required this.title,
-    required this.desc,
+    required this.description,
+    required this.url,
   });
 
   // required this.url
 
-  @override
+   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[Image.network(imageUrl,
+    debugPrint("desc: $description");
+    debugPrint("title: $title");
+    return GestureDetector(
+      // onTap: (){
+      //   Navigator.push(context, MaterialPageRoute(
+      //       builder: (context)=>ArticleView(
+      //
+      //   )
+      //   ));
+      // },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16),
+        child: Column(
 
-        errorBuilder: (ctx,obj,_)=>SizedBox(),
-        ), Text(title), Text(desc)],
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.network(imageUrl,
+
+                errorBuilder: (ctx,obj,_)=>SizedBox(),
+          ),
+            ),
+            SizedBox(height: 8,),
+            Text(title , style: TextStyle(
+            fontSize: 18,
+            color: Colors.black87,
+              fontWeight: FontWeight.w500
+          ),),
+            SizedBox(height: 8,),
+            Text(description, style: TextStyle(
+              color: Colors.black54),
+
+            )],
+        ),
       ),
     );
   }
